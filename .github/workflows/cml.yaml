@@ -1,25 +1,48 @@
-name: CML
+# Model Wine Quality GitHub Actions Workflow
+name: model_wine_quality
 
+# Define when the workflow is triggered
 on:
-  push:
-    branches:
-      - main
+  push:  # Runs the workflow on every push
+  schedule:
+    - cron: '0 0 * * *'  # Runs daily at midnight
 
+# Define the jobs in the workflow
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  run:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu version for the runner
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v3  # Checkout the repository
+      - uses: actions/setup-python@v4  # Setup Python environment
 
-    - name: Install CML
-      run: |
-        npm install -g @dvcorg/cml
+      # Cache pip packages to speed up future builds
+      - name: Cache pip packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
-    - name: Run CML
-      env:
-        CML_RUN_ID: ${{github.run_id}}
-        CML_PROJECT_PATH: ${{github.workspace}}
-      run: |
-        cml-publish confusion_matrix.png --md
-        cml-send-comment "$(cat report.md)"
+      - uses: iterative/setup-cml@v1  # Setup CML (Continuous Machine Learning) environment
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          pip install -U scikit-learn
+          pip install -r requirements.txt
+      - name: Train model
+        run: |
+          python train.py
+
+          echo "MODEL METRICS"
+          cat metrics.txt
+      - name: Upload model artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: model-artifacts-${{ matrix.python-version }}
+          path: |
+            feature_importance.png
+            residuals.png
+            metrics.txt
