@@ -1,19 +1,22 @@
+# Model Wine Quality GitHub Actions Workflow
 name: model_wine_quality
 
+# Define when the workflow is triggered
 on:
-  push:
+  push:  # Runs the workflow on every push
   schedule:
     - cron: '0 0 * * *'  # Runs daily at midnight
 
+# Define the jobs in the workflow
 jobs:
   run:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Use the latest Ubuntu version for the runner
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
+      - uses: actions/checkout@v3  # Checkout the repository
+      - uses: actions/setup-python@v4  # Setup Python environment
+
+      # Cache pip packages to speed up future builds
       - name: Cache pip packages
         uses: actions/cache@v3
         with:
@@ -21,7 +24,10 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-      - uses: iterative/setup-cml@v1
+
+      - uses: iterative/setup-cml@v1  # Setup CML (Continuous Machine Learning) environment
+
+      # Install dependencies
       - name: Install dependencies
         run: |
           pip install -U scikit-learn
