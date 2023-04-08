@@ -54,4 +54,4 @@ jobs:
           cml-send-comment report.md
           
           env:
-            REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+             CML_REPOTOKEN: ${{ secrets.GITHUB_TOKEN }}
