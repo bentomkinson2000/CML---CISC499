@@ -34,18 +34,16 @@ jobs:
         run: |
           pip install -U scikit-learn
           pip install -r requirements.txt
-      - name: Train model
+
+      # Train the model and generate a report with the training results
+      - name: Train model and create report
         run: |
           python train.py
-          
-          echo  "## Model metrics" > report.md
-          cat metrics.txt >> report.md
-          
-          echo "## Data visualization" >> report.md
-          cml-publish feature_importance.png --md >> report.md
-          cml-publish residuals.png --md >> report.md
-          
+
+          echo "## Training Results" > report.md
+          cat results.txt >> report.md
+
           cml-send-comment report.md
-          
+
 
 
