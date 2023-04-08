@@ -52,3 +52,6 @@ jobs:
           cml-publish residuals.png --md >> report.md
 
           cml-send-comment report.md
+          
+          env:
+            REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
