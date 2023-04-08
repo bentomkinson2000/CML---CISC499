@@ -27,7 +27,7 @@ jobs:
 
       - uses: iterative/setup-cml@v1  # Setup CML (Continuous Machine Learning) environment
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Install dependencies
       - name: Install dependencies
