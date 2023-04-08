@@ -41,9 +41,11 @@ jobs:
           python train.py
 
           echo "## Training Results" > report.md
-          cat results.txt >> report.md
+          cat output/results.txt >> report.md
 
           cml-send-comment report.md
+          
+      
 
 
 
