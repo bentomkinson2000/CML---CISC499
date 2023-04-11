@@ -24,31 +24,23 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-
       - uses: iterative/setup-cml@v1  # Setup CML (Continuous Machine Learning) environment
-        env:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
 
       # Install dependencies
       - name: Install dependencies
         run: |
-          pip install pandas scikit-learn seaborn matplotlib
+          pip install -U scikit-learn
           pip install -r requirements.txt
-
-      # Train the model
       - name: Train model
         run: |
           python train.py
-
-      # Generate a report with the training results and images
-      - name: Create report
-        run: |
-          echo "## Model metrics" > report.md
-          cat metrics.txt >> report.md
-
-          echo "## Data viz" >> report.md
-          cml-publish feature_importance.png --md >> report.md
-          cml-publish residuals.png --md >> report.md
-          
-          cml-send-comment report.md
-
+          echo "MODEL METRICS"
+          cat metrics.txt
+      - name: Upload model artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: model-artifacts-${{ matrix.python-version }}
+          path: |
+            feature_importance.png
+            residuals.png
+            metrics.txt
