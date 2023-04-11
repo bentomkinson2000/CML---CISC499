@@ -27,7 +27,7 @@ jobs:
 
       - uses: iterative/setup-cml@v1  # Setup CML (Continuous Machine Learning) environment
         env:
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
 
       # Install dependencies
       - name: Install dependencies
@@ -43,7 +43,7 @@ jobs:
       # Generate a report with the training results and images
       - name: Create report
         run: |
-          echo "## Model Metrics" > report.md
+          echo "## Model metrics" > report.md
           cat metrics.txt >> report.md
 
           echo "## Data viz" >> report.md
