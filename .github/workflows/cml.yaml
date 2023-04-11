@@ -42,16 +42,12 @@ jobs:
       # Generate a report with the training results and images
       - name: Create report
         run: |
-          echo "## Training Results" > report.md
+          echo "## Model Metrics" > report.md
           cat metrics.txt >> report.md
 
-          echo "## Feature Importance" >> report.md
+          echo "## Data viz" >> report.md
           cml-publish feature_importance.png --md >> report.md
-
-          echo "## Residuals" >> report.md
           cml-publish residuals.png --md >> report.md
-
-          cml-send-comment report.md
           
-          env:
-             CML_REPOTOKEN: ${{ secrets.GITHUB_TOKEN }}
+          cml-send-comment report.md
+
