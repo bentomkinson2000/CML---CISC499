@@ -33,6 +33,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install pandas scikit-learn seaborn matplotlib
+          pip install -r requirments.txt
 
       # Train the model
       - name: Train model
